@@ -165,7 +165,7 @@ public class proyectoFinalLogica {
             int total = contadorProductos[zona][repisa];
 
             if (total == 0) {
-                System.out.println("⚠️  Esta repisa no tiene productos aún.");
+                System.out.println("  Esta repisa no tiene productos aún.");
                 return;
             }
 
@@ -185,7 +185,7 @@ public class proyectoFinalLogica {
             }
 
             System.out.println("========================================");
-            System.out.println("Orden: mayor precio → menor precio ✅");
+            System.out.println("Orden: mayor precio → menor precio ");
 
         } catch (NumberFormatException e) {
             System.out.println("Error: ingrese solo números válidos.");
@@ -207,7 +207,7 @@ public class proyectoFinalLogica {
 
             for (int repisa = 0; repisa < nombreRepisas[zona].length; repisa++) {
                 int total = contadorProductos[zona][repisa];
-                System.out.println("\n  📦 Repisa: " + nombreRepisas[zona][repisa]);
+                System.out.println("\n   Repisa: " + nombreRepisas[zona][repisa]);
 
                 if (total == 0) {
                     System.out.println("     (Sin productos)");
