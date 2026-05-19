@@ -123,12 +123,142 @@ public class proyectoFinalLogica {
             tienda[zona][repisa][pos] = new Producto(nombreProducto, precio, cantidad);
             contadorProductos[zona][repisa]++;
 
-            System.out.println("✅ " + nombreProducto + " agregado correctamente a " + nombreRepisas[zona][repisa]);
+            System.out.println(" " + nombreProducto + " agregado correctamente a " + nombreRepisas[zona][repisa]);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: ingrese solo números válidos.");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Error: opción fuera de rango.");
+        }
+    }
+
+ // ═══════════════════════════════════════
+    //     PARTE 7: SELECTION SORT
+    // ═══════════════════════════════════════
+    static void ordenarRepisa(Producto[] repisa, int totalProductos) {
+        for (int i = 0; i < totalProductos - 1; i++) {
+            int maxIdx = i;
+
+            // Busca el más caro en la parte no ordenada
+            for (int j = i + 1; j < totalProductos; j++) {
+                if (repisa[j].precio > repisa[maxIdx].precio) {
+                    maxIdx = j;
+                }
+            }
+
+            // Intercambia
+            Producto temp  = repisa[maxIdx];
+            repisa[maxIdx] = repisa[i];
+            repisa[i]      = temp;
+        }
+    }
+
+    // ═══════════════════════════════════════
+    //      PARTE 8: VER REPISA ORGANIZADA
+    // ═══════════════════════════════════════
+    static void verRepisa() {
+        try {
+            int[] seleccion = seleccionarZonaRepisa();
+            int zona   = seleccion[0];
+            int repisa = seleccion[1];
+
+            int total = contadorProductos[zona][repisa];
+
+            if (total == 0) {
+                System.out.println("⚠️  Esta repisa no tiene productos aún.");
+                return;
+            }
+
+            ordenarRepisa(tienda[zona][repisa], total);
+
+            System.out.println("\n========================================");
+            System.out.println("  REPISA: " + nombreRepisas[zona][repisa]);
+            System.out.println("  ZONA:   " + nombreZonas[zona]);
+            System.out.println("========================================");
+            System.out.printf("%-5s %-20s %-15s %-10s%n", "Pos.", "Producto", "Precio", "Cantidad");
+            System.out.println("----------------------------------------");
+
+            for (int i = 0; i < total; i++) {
+                Producto p = tienda[zona][repisa][i];
+                System.out.printf("%-5d %-20s $%-14.0f %-10d%n",
+                    (i + 1), p.nombre, p.precio, p.cantidad);
+            }
+
+            System.out.println("========================================");
+            System.out.println("Orden: mayor precio → menor precio ✅");
+
+        } catch (NumberFormatException e) {
+            System.out.println("Error: ingrese solo números válidos.");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: opción fuera de rango.");
+        }
+    }
+
+    // ═══════════════════════════════════════
+    //       PARTE 9: VER TODA LA TIENDA
+    // ═══════════════════════════════════════
+    static void verTienda() {
+        System.out.println("\n╔══════════════════════════════════════╗");
+        System.out.println("║       ESTADO COMPLETO DE LA TIENDA   ║");
+        System.out.println("╚══════════════════════════════════════╝");
+
+        for (int zona = 0; zona < nombreZonas.length; zona++) {
+            System.out.println("\n🏬 ZONA: " + nombreZonas[zona]);
+
+            for (int repisa = 0; repisa < nombreRepisas[zona].length; repisa++) {
+                int total = contadorProductos[zona][repisa];
+                System.out.println("\n  📦 Repisa: " + nombreRepisas[zona][repisa]);
+
+                if (total == 0) {
+                    System.out.println("     (Sin productos)");
+                } else {
+                    ordenarRepisa(tienda[zona][repisa], total);
+                    System.out.printf("  %-5s %-20s %-15s %-10s%n", "Pos.", "Producto", "Precio", "Cantidad");
+                    System.out.println("  ----------------------------------------");
+                    for (int p = 0; p < total; p++) {
+                        Producto prod = tienda[zona][repisa][p];
+                        System.out.printf("  %-5d %-20s $%-14.0f %-10d%n",
+                            (p + 1), prod.nombre, prod.precio, prod.cantidad);
+                    }
+                }
+            }
+        }
+        System.out.println("\n========================================");
+    }
+
+    // ═══════════════════════════════════════
+    //              PARTE 10: MAIN
+    // ═══════════════════════════════════════
+    public static void main(String[] args) throws Exception {
+        System.out.println("Bienvenido al sistema de organización de tienda.");
+
+        int opcion = -1;
+
+        while (opcion != 0) {
+            mostrarMenu();
+
+            try {
+                opcion = Integer.parseInt(sc.nextLine());
+
+                switch (opcion) {
+                    case 1:
+                        agregarProducto();
+                        break;
+                    case 2:
+                        verRepisa();
+                        break;
+                    case 3:
+                        verTienda();
+                        break;
+                    case 0:
+                        System.out.println("¡Hasta luego!");
+                        break;
+                    default:
+                        System.out.println("Opción no válida, intente de nuevo.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Error: ingrese solo números.");
+            }
         }
     }
 }
